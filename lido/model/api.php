@@ -59,7 +59,8 @@ class api {
         foreach ($this->parsing['unwrapped_xml'] as $lidoxml) {
             $l = new lidoXML ($lidoxml);
             $j = new lidoJSON ($l->convertAllFromXML (), 'baselido');
-            array_push ($r, json_decode ($j->convertAllToJSON (), true));
+            //array_push ($r, json_decode ($j->convertAllToJSON (), true));
+            array_push ($r, $j->convertToJSON ());
             if (json_last_error () != JSON_ERROR_NONE) {
                 throw new Exception ('Error: failed to decode JSON response');
             }

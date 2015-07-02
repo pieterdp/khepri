@@ -2,6 +2,7 @@
 
 /**
  * Class lidoXML
+ * TODO fix the bit where elements are returned twice in JSON => objects are repeated in arrays
  * (c) 2015 PACKED vzw <pieter@packed.be>
  * Convert lido XML to a baseLidoElement and vice-versa
  */
