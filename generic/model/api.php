@@ -1,5 +1,6 @@
 <?php
 
+require_once('ApiRequest.php');
 
 class api {
 
@@ -8,6 +9,7 @@ class api {
      * Gets the response of an upstream api (identified by url) and output as response, changing nothing and
      * keeping the header content-type
      * For the response of the V&A API, do some extra tricks
+     * https://stackoverflow.com/questions/12331224/how-to-include-authorization-header-in-curl-post-http-request-in-php
      */
 
     public $response = array (
@@ -115,21 +117,12 @@ class api {
      * @return array $reply (has the same keys/values as $this->requesŧ['upstream_response'])
      */
     protected function perform_upstream_request ($url = null) {
-        /*CURLINFO_CONTENT_TYPE*/
-        $reply = array ();
         if ($url == null) {
             $url = $this->request['url'];
         }
-        $curl = curl_init ();
-        curl_setopt ($curl, CURLOPT_URL, $url);
-        curl_setopt ($curl, CURLOPT_RETURNTRANSFER, 1);
-        $data = curl_exec ($curl);
-        if (curl_getinfo ($curl, CURLINFO_HTTP_CODE) != 200) {
-            throw new Exception ('Error: upstream '.$url.' did not return 200 OK: '.curl_getinfo ($curl, CURLINFO_HTTP_CODE));
-        }
-        $reply['content'] = $data;
-        $reply['content-type'] = curl_getinfo ($curl, CURLINFO_CONTENT_TYPE);
-        curl_close ($curl);
+        $remote = null;
+        $remote = new RemoteRequest($url);
+        $reply = $remote->request['reply'];
         return $reply;
     }
 
